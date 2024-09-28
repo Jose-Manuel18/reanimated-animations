@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent, View } from "react-native";
+import { Dimensions, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import { CarouselListItem } from "./CarouselListItem";
 
@@ -7,8 +7,11 @@ type CarouselProps = {
   width: number;
   height: number;
   data: { id: number; url: string }[];
+  separation?: number;
 };
-export const Carousel: React.FC<CarouselProps> = ({ data, width, height }) => {
+const { width: screenWidth } = Dimensions.get("window");
+
+export const Carousel: React.FC<CarouselProps> = ({ separation = 10, data, width, height }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const offsetValue = useSharedValue(0);
 
@@ -19,28 +22,31 @@ export const Carousel: React.FC<CarouselProps> = ({ data, width, height }) => {
     setActiveIndex(index);
   };
   return (
-    <View style={{ width, height }}>
-      <Animated.FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item, index }) => {
-          return <CarouselListItem offsetValue={offsetValue} id={item.id} index={index} url={item.url} width={width} />;
-        }}
-        horizontal
-        pagingEnabled
-        snapToInterval={width / 2 + 20}
-        decelerationRate="fast"
-        scrollEventThrottle={16}
-        contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        onScroll={handleScrollOffset}
-        style={{
-          position: "absolute",
-          bottom: 60,
-        }}
-      />
-    </View>
+    <Animated.FlatList
+      data={data}
+      keyExtractor={(item) => (typeof item.id === "number" ? item.id.toString() : item.id)}
+      renderItem={({ item, index }) => {
+        return (
+          <CarouselListItem
+            offsetValue={offsetValue}
+            id={Number(item.id)}
+            index={index}
+            url={item.url}
+            width={width}
+            separation={separation}
+            length={Number(data.at(-1)!.id)}
+            height={height}
+          />
+        );
+      }}
+      horizontal
+      pagingEnabled
+      snapToInterval={width + separation}
+      // snapToAlignment="center"
+      decelerationRate="fast"
+      scrollEventThrottle={16}
+      ItemSeparatorComponent={() => <Animated.View style={{ width: separation }} />}
+      onScroll={handleScrollOffset}
+    />
   );
 };
