@@ -1,4 +1,4 @@
-import { Dimensions, ImageStyle, StyleProp, View } from "react-native";
+import { Dimensions, ImageStyle, StyleProp } from "react-native";
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated";
 type CarouselListItemProps = {
   id: number;
@@ -10,6 +10,7 @@ type CarouselListItemProps = {
   length: number;
   height: number;
   itemStyle?: StyleProp<ImageStyle>;
+  enableAnimation?: boolean;
 };
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -22,6 +23,7 @@ export const CarouselListItem: React.FC<CarouselListItemProps> = ({
   height,
   itemStyle,
   separation,
+  enableAnimation,
 }) => {
   //!TODO FIX THE ANIMATION, FOR SOME REASON THE MORE YOU SCROLL THE MORE IT GETS OUT OF SYNC.
 
@@ -44,7 +46,7 @@ export const CarouselListItem: React.FC<CarouselListItemProps> = ({
           width,
           height,
         },
-        animatedStyles,
+        enableAnimation && animatedStyles,
       ]}
     >
       <Animated.Image
@@ -52,7 +54,7 @@ export const CarouselListItem: React.FC<CarouselListItemProps> = ({
         style={[{ width, height, resizeMode: "cover", borderRadius: 100 }, itemStyle]}
       />
       {/* MIDDLE */}
-      <View style={{ position: "absolute", left: width / 2, width: 2, height: "100%", backgroundColor: "yellow" }} />
+      {/* <View style={{ position: "absolute", left: width / 2, width: 2, height: "100%", backgroundColor: "yellow" }} /> */}
     </Animated.View>
   );
 };

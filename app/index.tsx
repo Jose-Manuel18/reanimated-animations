@@ -1,5 +1,5 @@
 import { Carousel } from "@/components/animated-components/carousel/Carousel";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 
 export interface Photos {
   albumId: number;
@@ -16,14 +16,14 @@ export const height = 400;
 const url =
   "https://images.unsplash.com/photo-1727461567487-575ec98777fc?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 const array = Array.from({ length: 100 }, () => url);
-
+const startPosition = "center";
 export default function HomeScreen(): JSX.Element {
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={{
           position: "absolute",
-          left: screenWidth / 2 - width / 2,
+          left: startPosition === "left" ? 0 : screenWidth / 2 - width / 2,
           width: width,
           height: height,
           backgroundColor: "transparent",
@@ -41,16 +41,17 @@ export default function HomeScreen(): JSX.Element {
             backgroundColor: "green",
           }}
         />
-      </View>
+      </View> */}
       <Carousel
+        startPosition={startPosition}
         separation={12}
         data={array}
         width={width}
         height={height}
+        // enableAnimation
         itemStyle={{ borderRadius: 20 }}
         showsHorizontalScrollIndicator={false}
       />
-      <Text style={{ color: "white" }}>saludos buenas tardes!</Text>
     </View>
   );
 }

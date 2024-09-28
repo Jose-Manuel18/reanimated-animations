@@ -18,9 +18,20 @@ interface CarouselProps extends Omit<FlatListProps<any>, "renderItem"> {
   data: string[];
   separation?: number;
   itemStyle?: StyleProp<ImageStyle>;
+  startPosition?: "center" | "left";
+  enableAnimation?: boolean;
 }
 const { width: screenWidth } = Dimensions.get("window");
-export const Carousel: React.FC<CarouselProps> = ({ itemStyle, separation = 10, data, width, height, ...props }) => {
+export const Carousel: React.FC<CarouselProps> = ({
+  itemStyle,
+  separation = 10,
+  data,
+  width,
+  height,
+  startPosition,
+  enableAnimation,
+  ...props
+}) => {
   const listData = data.map((item, index) => {
     return {
       id: index,
@@ -66,12 +77,13 @@ export const Carousel: React.FC<CarouselProps> = ({ itemStyle, separation = 10, 
               separation={separation}
               length={Number(listData.at(-1)!.id)}
               height={height}
+              enableAnimation={enableAnimation}
             />
           );
         }}
         //* For centering the content
         contentContainerStyle={{
-          paddingHorizontal: screenWidth / 2 - width / 2,
+          paddingHorizontal: startPosition === "center" ? screenWidth / 2 - width / 2 : 0,
           justifyContent: "center",
           alignItems: "center",
         }}
