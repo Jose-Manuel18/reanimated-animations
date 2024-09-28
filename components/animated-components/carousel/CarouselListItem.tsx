@@ -15,21 +15,23 @@ type CarouselListItemProps = {
 const { width: screenWidth } = Dimensions.get("window");
 
 export const CarouselListItem: React.FC<CarouselListItemProps> = ({
-  separation,
-  id,
   index,
   url,
   width,
   offsetValue,
-  length,
   height,
   itemStyle,
+  separation,
 }) => {
   //!TODO FIX THE ANIMATION, FOR SOME REASON THE MORE YOU SCROLL THE MORE IT GETS OUT OF SYNC.
 
   const animatedStyles = useAnimatedStyle(() => {
-    const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
-    const outputRange = [0.6, 1, 0.6];
+    const inputRange = [
+      (index - 1) * (width + separation),
+      index * (width + separation),
+      (index + 1) * (width + separation),
+    ];
+    const outputRange = [0.9, 1, 0.9];
     return {
       transform: [{ scale: interpolate(offsetValue.value, inputRange, outputRange) }],
     };

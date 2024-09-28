@@ -11,18 +11,16 @@ export interface Photos {
 
 const { width: screenWidth } = Dimensions.get("window");
 
-export const width = screenWidth * 0.6;
+export const width = screenWidth * 0.8;
 export const height = 400;
-const testingImage = [
-  "https://images.unsplash.com/photo-1727461567487-575ec98777fc?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1721092495872-5cac43ff3f47?q=80&w=2456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1721092495872-5cac43ff3f47?q=80&w=2456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-];
+const url =
+  "https://images.unsplash.com/photo-1727461567487-575ec98777fc?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+const array = Array.from({ length: 100 }, () => url);
 
 export default function HomeScreen(): JSX.Element {
   return (
     <View style={styles.container}>
-      {/* <View
+      <View
         style={{
           position: "absolute",
           left: screenWidth / 2 - width / 2,
@@ -43,10 +41,10 @@ export default function HomeScreen(): JSX.Element {
             backgroundColor: "green",
           }}
         />
-      </View> */}
+      </View>
       <Carousel
-        separation={16}
-        data={testingImage}
+        separation={12}
+        data={array}
         width={width}
         height={height}
         itemStyle={{ borderRadius: 20 }}
