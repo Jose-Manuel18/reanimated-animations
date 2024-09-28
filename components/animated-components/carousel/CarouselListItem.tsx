@@ -25,6 +25,8 @@ export const CarouselListItem: React.FC<CarouselListItemProps> = ({
   height,
   itemStyle,
 }) => {
+  //!TODO FIX THE ANIMATION, FOR SOME REASON THE MORE YOU SCROLL THE MORE IT GETS OUT OF SYNC.
+
   const animatedStyles = useAnimatedStyle(() => {
     const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
     const outputRange = [0.6, 1, 0.6];
