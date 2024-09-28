@@ -1,17 +1,32 @@
 import React, { useState } from "react";
-import { Dimensions, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import Animated, { useSharedValue } from "react-native-reanimated";
+import {
+  Dimensions,
+  FlatList,
+  FlatListProps,
+  ImageStyle,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  View,
+} from "react-native";
+import { useSharedValue } from "react-native-reanimated";
 import { CarouselListItem } from "./CarouselListItem";
 
-type CarouselProps = {
+interface CarouselProps extends Omit<FlatListProps<any>, "renderItem"> {
   width: number;
   height: number;
-  data: { id: number; url: string }[];
+  data: string[];
   separation?: number;
-};
+  itemStyle?: StyleProp<ImageStyle>;
+}
 const { width: screenWidth } = Dimensions.get("window");
-
-export const Carousel: React.FC<CarouselProps> = ({ separation = 10, data, width, height }) => {
+export const Carousel: React.FC<CarouselProps> = ({ itemStyle, separation = 10, data, width, height, ...props }) => {
+  const listData = data.map((item, index) => {
+    return {
+      id: index,
+      url: item,
+    };
+  });
   const [activeIndex, setActiveIndex] = useState(0);
   const offsetValue = useSharedValue(0);
 
@@ -22,31 +37,46 @@ export const Carousel: React.FC<CarouselProps> = ({ separation = 10, data, width
     setActiveIndex(index);
   };
   return (
-    <Animated.FlatList
-      data={data}
-      keyExtractor={(item) => (typeof item.id === "number" ? item.id.toString() : item.id)}
-      renderItem={({ item, index }) => {
-        return (
-          <CarouselListItem
-            offsetValue={offsetValue}
-            id={Number(item.id)}
-            index={index}
-            url={item.url}
-            width={width}
-            separation={separation}
-            length={Number(data.at(-1)!.id)}
-            height={height}
-          />
-        );
+    <View
+      style={{
+        width: "100%",
+        height: height,
       }}
-      horizontal
-      pagingEnabled
-      snapToInterval={width + separation}
-      // snapToAlignment="center"
-      decelerationRate="fast"
-      scrollEventThrottle={16}
-      ItemSeparatorComponent={() => <Animated.View style={{ width: separation }} />}
-      onScroll={handleScrollOffset}
-    />
+    >
+      <FlatList
+        data={listData}
+        keyExtractor={(item) => (typeof item.id === "number" ? item.id.toString() : item.id)}
+        horizontal
+        pagingEnabled
+        snapToInterval={width + separation}
+        // snapToAlignment="center"
+        decelerationRate="fast"
+        scrollEventThrottle={16}
+        ItemSeparatorComponent={() => <View style={{ width: separation }} />}
+        onScroll={handleScrollOffset}
+        renderItem={({ item, index }) => {
+          return (
+            <CarouselListItem
+              itemStyle={itemStyle}
+              offsetValue={offsetValue}
+              id={Number(item.id)}
+              index={index}
+              url={item.url}
+              width={width}
+              separation={separation}
+              length={Number(listData.at(-1)!.id)}
+              height={height}
+            />
+          );
+        }}
+        //* For centering the content
+        contentContainerStyle={{
+          paddingHorizontal: screenWidth / 2 - width / 2,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        {...props}
+      />
+    </View>
   );
 };
