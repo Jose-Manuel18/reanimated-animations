@@ -25,7 +25,7 @@ export const CarouselListItem: React.FC<CarouselListItemProps> = ({
   separation,
   enableAnimation,
 }) => {
-  //!TODO FIX THE ANIMATION, FOR SOME REASON THE MORE YOU SCROLL THE MORE IT GETS OUT OF SYNC.
+  //TODO FIX THE ANIMATION, FOR SOME REASON THE MORE YOU SCROLL THE MORE IT GETS OUT OF SYNC.
 
   const animatedStyles = useAnimatedStyle(() => {
     const inputRange = [
