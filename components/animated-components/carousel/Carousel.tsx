@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { AnimationType } from "@/shared/animation.types";
+import React from "react";
 import {
   Dimensions,
   FlatList,
@@ -19,7 +20,7 @@ interface CarouselProps extends Omit<FlatListProps<any>, "renderItem"> {
   separation?: number;
   itemStyle?: StyleProp<ImageStyle>;
   startPosition?: "center" | "left";
-  enableAnimation?: boolean;
+  animationType?: AnimationType;
 }
 const { width: screenWidth } = Dimensions.get("window");
 export const Carousel: React.FC<CarouselProps> = ({
@@ -29,7 +30,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   width,
   height,
   startPosition,
-  enableAnimation,
+  animationType,
   ...props
 }) => {
   const listData = data.map((item, index) => {
@@ -38,20 +39,19 @@ export const Carousel: React.FC<CarouselProps> = ({
       url: item,
     };
   });
-  const [activeIndex, setActiveIndex] = useState(0);
+
   const offsetValue = useSharedValue(0);
 
   const handleScrollOffset = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offset = event.nativeEvent.contentOffset.x;
     offsetValue.value = offset;
-    const index = offset / width;
-    setActiveIndex(index);
   };
   return (
     <View
       style={{
         width: "100%",
         height: height,
+        position: "relative",
       }}
     >
       <FlatList
@@ -77,7 +77,7 @@ export const Carousel: React.FC<CarouselProps> = ({
               separation={separation}
               length={Number(listData.at(-1)!.id)}
               height={height}
-              enableAnimation={enableAnimation}
+              animationType={animationType}
             />
           );
         }}
